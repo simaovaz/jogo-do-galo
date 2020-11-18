@@ -20,8 +20,6 @@ function jogada(cenas){
     }
     console.log(tabuleiro)
     checkWinner()
-    
-    
 
 }
 
@@ -89,5 +87,5 @@ function grandeVencedor() {
     }else {
         counter="X";
     }
-    document.getElementById("vencedor").innerHTML = "ACABOU! O vencedor é o jogador com o " + counter + "!!!";
+    document.getElementById("vencedor").innerHTML = "TERMINOU! O vencedor é o jogador com o " + counter + "!!!";
 }
