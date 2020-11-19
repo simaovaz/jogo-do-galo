@@ -1,91 +1,50 @@
-
-var tabuleiro = ["","","","","","","","",""];
+var tabuleiro = [['', '', ''], ['', '', ''], ['', '', '']]
 var simbolo = "X"
-
-var tabVazio= true;
+var finished = false;
 
 var cenas;
-function jogada(cenas){
-    tabVazio= false;
-    var block = "block_" + cenas;
-    document.getElementById(block).innerHTML = simbolo;
-    tabuleiro[cenas]= simbolo;
-    if( simbolo === "X"){
-        simbolo= "O";
-        
-        
-    }else if (simbolo === "O"){
-        simbolo = "X"
-        
-    }
-    console.log(tabuleiro)
-    checkWinner()
-
-}
-
-function checkWinner () {
-    if(tabVazio=== false) {
-        if(tabuleiro[0]!= 0 && tabuleiro[0]==tabuleiro[1]){
-            if(tabuleiro[0]==tabuleiro[2]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[3]!= 0 && tabuleiro[3]==tabuleiro[4]){
-            if(tabuleiro[3]==tabuleiro[5]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[6]!= 0 && tabuleiro[6]==tabuleiro[7]){
-            if(tabuleiro[6]==tabuleiro[8]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[0]!= 0 && tabuleiro[0]==tabuleiro[3]){
-            if(tabuleiro[0]==tabuleiro[6]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[1]!= 0 && tabuleiro[1]==tabuleiro[4]){
-            if(tabuleiro[1]==tabuleiro[7]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[2]!= 0 && tabuleiro[2]==tabuleiro[5]){
-            if(tabuleiro[2]==tabuleiro[8]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[0]!= 0 && tabuleiro[0]==tabuleiro[4]){
-            if(tabuleiro[0]==tabuleiro[8]){
-            grandeVencedor()
-            restart()
-            }
-        }else if(tabuleiro[2]!= 0 && tabuleiro[2]==tabuleiro[4]){
-            if(tabuleiro[2]==tabuleiro[6]){
-            grandeVencedor()
-            restart()
-            }
-        }
-
+function jogada(cenas, lin, col) {
+    if (!finished) {
+        var block = "block_" + cenas;
+        document.getElementById(block).innerHTML = simbolo;
+        tabuleiro[lin][col] = simbolo;
+        checkWinner()
+        simbolo = simbolo === 'X' ? 'O' : 'X'
     }
 }
- 
 
-
-function restart(){
-    var elements= document.getElementsByClassName("area-jogo");
-    for(var i=0;i<elements.length; i++){
-        elements[i].style.backgroundColor= "red";
+function checkWinner() {
+    for (var i = 0; i < 3; i++) {
+        checkLinha(i) && grandeVencedor();
+        checkColuna(i) && grandeVencedor();
+        checkCross() && grandeVencedor();
     }
+}
 
+
+function checkLinha(i) {
+    return tabuleiro[i][0] && tabuleiro[i][0] === tabuleiro[i][1] && tabuleiro[i][1] === tabuleiro[i][2];
+}
+
+function checkColuna(i) {
+    return tabuleiro[0][i] && tabuleiro[0][i] === tabuleiro[1][i] && tabuleiro[1][i] === tabuleiro[2][i];
+}
+
+function checkCross() {
+    return tabuleiro[1][1] && ((tabuleiro[0][0] === tabuleiro[1][1] && tabuleiro[1][1] === tabuleiro[2][2]) ||
+        (tabuleiro[2][0] === tabuleiro[1][1] && tabuleiro[1][1] === tabuleiro[0][2]))
+}
+
+
+function restart() {
+    var elements = document.getElementsByClassName("area-jogo");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].style.backgroundColor = "red";
+    }
+    finished = true;
 }
 
 function grandeVencedor() {
-    var counter;
-    if(simbolo ==="X"){
-        counter= "O";
-    }else {
-        counter="X";
-    }
-    document.getElementById("vencedor").innerHTML = "TERMINOU! O vencedor é o jogador com o " + counter + "!!!";
+    document.getElementById("vencedor").innerHTML = "TERMINOU! O vencedor é o jogador com o " + simbolo + "!!!";
+    restart();
 }
